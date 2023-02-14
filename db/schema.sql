@@ -13,3 +13,26 @@ CREATE TABLE books (
     is_favorite BOOLEAN,
     uri TEXT DEFAULT 'https://dummyimage.com/400x400/6e6c6e/e9e9f5.png&text=No+Image'
 );
+
+
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+ id SERIAL PRIMARY KEY,
+ username TEXT UNIQUE,
+ password TEXT
+);
+
+
+DROP TABLE IF EXISTS reviews;
+
+CREATE TABLE reviews (
+ id SERIAL PRIMARY KEY,
+ reviewer TEXT REFERENCES users (username),
+ title TEXT,
+ content TEXT,
+ rating NUMERIC,
+ CHECK (rating >= 0 AND rating <= 5),
+ book_id INTEGER REFERENCES books (id)
+ ON DELETE CASCADE
+);

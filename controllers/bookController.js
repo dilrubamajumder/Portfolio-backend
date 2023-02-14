@@ -7,8 +7,13 @@ const {
   deleteBook,
   updateBook,
 } = require("../queries/books");
-
 const {nameCap, checkBoolean, checkAuthor, checkTitle } = require("../Helpers/helper")
+
+const reviewsController = require('./reviewsController')
+books.use('/:bookId/reviews', reviewsController)
+
+
+
 
 //Index
 books.get("/", async (req, res) => {

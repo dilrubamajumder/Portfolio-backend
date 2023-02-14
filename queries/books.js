@@ -23,10 +23,10 @@ const getOneBook = async (id) => {
 const createBook = async (book) => {
   try {
     const newBook = await db.one(
-      "INSERT INTO books (title, year, author, description, category, is_favorite, uri) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      "INSERT INTO books (title, published_year, author, description, category, is_favorite, uri) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
       [
         book.title,
-        book.year,
+        book.published_year,
         book.author,
         book.description,
         book.category,
@@ -57,10 +57,10 @@ const deleteBook = async (id) => {
 const updateBook = async (id, book) => {
   try {
     const updatedBook = await db.one(
-      "UPDATE books SET title=$1, year=$2, author=$3, description=$4, category=$5, is_favorite=$6, uri=$7 WHERE id=$8 RETURNING *",
+      "UPDATE books SET title=$1, published_year=$2, author=$3, description=$4, category=$5, is_favorite=$6, uri=$7 WHERE id=$8 RETURNING *",
       [
         book.title,
-        book.year,
+        book.published_year,
         book.author,
         book.description,
         book.category,
