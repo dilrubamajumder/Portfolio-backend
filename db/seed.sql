@@ -30,7 +30,7 @@ INSERT INTO books (added_by, primary_review, title, published_year, author, desc
 
 
 
-INSERT INTO reviews (book_id, reviewer, title, content, rating )
+INSERT INTO reviews (book_id, reviewer, title, content, rating)
 VALUES
 ('1', 'nikesh2003', 'The Best', 'This book was amazing! I read it in like 3 days!', 5 ),
 ('2', 'dilruba2009', 'The Best', 'This book was amazing! I could`t put it down.', 5),
