@@ -3,11 +3,15 @@ CREATE DATABASE books_project;
 
 \c books_project;
 
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	username TEXT UNIQUE,
 	password TEXT
 );
+
+DROP TABLE IF EXISTS books;
 
 CREATE TABLE books (
 	id SERIAL PRIMARY KEY,
@@ -22,6 +26,7 @@ CREATE TABLE books (
 	uri TEXT DEFAULT 'https://dummyimage.com/400x400/6e6c6e/e9e9f5.png&text=No+Image'
 );
 
+DROP TABLE IF EXISTS reviews;
 
 CREATE TABLE reviews (
 	id SERIAL PRIMARY KEY,
