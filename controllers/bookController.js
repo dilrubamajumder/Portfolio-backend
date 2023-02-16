@@ -68,7 +68,7 @@ books.post("/", authenticate, checkBoolean, checkAuthor, checkTitle , async (req
 
 
 //Delete
-books.delete("/:id", async (req, res) => {
+books.delete("/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
       const deletedBook = await deleteBook(id);
@@ -83,7 +83,7 @@ books.delete("/:id", async (req, res) => {
   });
 
 //Update
-books.put("/:id",  checkBoolean, checkAuthor, checkTitle ,async (req, res) => {
+books.put("/:id", authenticate, checkBoolean, checkAuthor, checkTitle ,async (req, res) => {
     try {
       const { id } = req.params;
       const updatedBook = await updateBook(id, req.body);
