@@ -93,16 +93,15 @@ const {
     }
   });
 
-//logout function
-  users.get('/logout', (req, res) => {
-    res.clearCookie("token").sendStatus(200);
-  })
-
   //delete user
 
-  users.delete('/', async (req, res) => {
+  users.delete('/', authenticate, async (req, res) => {
     try {
+      const actualUser = req.username
       const { username, password } = req.body;
+      if (username !== actualUser) {
+        throw Error("You can't delete someone else");
+      }
       const user = await getOneUser(username);
   
       if (user.username !== username) throw Error("Incorrect Credentials");
