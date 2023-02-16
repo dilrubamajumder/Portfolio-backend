@@ -68,9 +68,9 @@ const {
   });
 
 //login function
-  users.put('/', async (req, res) => {
+  users.put('/', async (request, response) => {
     try {
-      const { username, password } = req.body;
+      const { username, password } = request.body;
       const user = await getOneUser(username);
       if (!user) {
         return res.status(401).send("User Does Not Exist.");
