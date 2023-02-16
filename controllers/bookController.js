@@ -6,7 +6,10 @@ const {
   createBook,
   deleteBook,
   updateBook,
+  getAllBooksByUser,
 } = require("../queries/books");
+const { getAllReviews } = require('../queries/reviews');
+const authenticate = require('./auth')
 const {nameCap, checkBoolean, checkAuthor, checkTitle } = require("../Helpers/helper")
 
 const reviewsController = require('./reviewsController')
@@ -25,23 +28,37 @@ books.get("/", async (req, res) => {
   }
 });
 
+// Get all books belonging to logged in user
+books.get("/user-books", authenticate, async (req, res) => {
+  const { username } = req
+  const allBooks = await getAllBooksByUser(username);
+  if (allBooks[0]) {
+    res.status(200).json(allBooks)
+  }else{
+    res.status(500).json({error: "server error"})
+  }
+});
+
+
 //Show
 books.get("/:id", async (req, res) => {
     const { id } = req.params;
     const oneBook = await getOneBook(id);
+    const allReviews = await getAllReviews(id)
   
     if (!oneBook.message) {
-      res.status(200).json(oneBook);
+      res.status(200).json({ bookInfo: oneBook, reviews: allReviews });
     } else {
       res.status(404).json({ error: "not found" });
     }
   });
 
 //Create
-books.post("/", checkBoolean, checkAuthor, checkTitle , async (req, res) => {
+books.post("/", authenticate, checkBoolean, checkAuthor, checkTitle , async (req, res) => {
     try {
-      const cap = nameCap(req.body);
-      const newBook = await createBook(cap);
+      const { username } = req
+      const bodyWithCapitalizedTitle = nameCap(req.body);
+      const newBook = await createBook({added_by: username, ...bodyWithCapitalizedTitle});
   
       res.status(200).json(newBook);
     } catch (error) {

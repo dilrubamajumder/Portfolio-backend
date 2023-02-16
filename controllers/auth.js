@@ -1,5 +1,3 @@
-
-
 const jwt = require("jsonwebtoken");
 const { getOneUser } = require('../queries/users')
 require("dotenv").config();
@@ -11,23 +9,17 @@ require("dotenv").config();
  * @param {object} next - The next function used to pass the req to the next middleware function
  */
 const authenticate = async (req, res, next) => {
-  const token = req.cookies.token;
+  
+  const token = req.headers.authorization;
 
   if (!token) return res.status(401).send("Token not found, please login.");
 
-  const { username } = await jwt.verify(
-    token,
-    process.env.AUTH_KEY,
-    (err, decoded) => {
-      if (err) throw Error("Failed to authenticate token");
-      return decoded;
-    }
-  );
+  const { username } = jwt.verify(req.headers.authorization.split(' ')[1], process.env.AUTH_KEY)
 
   const user = await getOneUser(username);
 
   if (!user) return res.status(404).send("No user found.");
-  req.userId = user.id;
+  req.username = user.username;
   next();
 };
 

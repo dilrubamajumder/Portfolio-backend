@@ -19,6 +19,16 @@ const {
     res.status(500).json({error: "server error"})
   }
   })
+// get user's information using their cookie
+  users.get('/by-username', authenticate, async (req, res) => {
+    const { username } = req;
+    const user = await getOneUser(username);
+    if (user) {
+      res.status(200).json({ id: user.id, username: user.username })
+    }else{
+      res.status(500).json({error: "server error"})
+    }
+  })
 /**
  * Validates users registration credentials
  * @param {string} username - The user's chosen tagname
@@ -62,7 +72,6 @@ const {
     try {
       const { username, password } = req.body;
       const user = await getOneUser(username);
-  console.log(user)
       if (!user) {
         return res.status(401).send("User Does Not Exist.");
       }
@@ -71,7 +80,12 @@ const {
   
       if (isValidPassword) {
         const token = jwt.sign({ username: user.username }, process.env.AUTH_KEY);
-        res.cookie("token", token).status(200).send(JSON.stringify(user));
+        console.log(user)
+        res.status(200).json({
+          user,
+          message: 'Account Creation Successful',
+          token
+      });
       }
     } catch (err) {
         console.log(err.message)

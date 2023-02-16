@@ -1,4 +1,5 @@
 const express = require('express')
+const authenticate = require('./auth')
 const reviews = express.Router({ mergeParams: true })
 const { getAllReviews, getReview, createReview, deleteReview, updateReview } = require('../queries/reviews')
 
@@ -28,9 +29,10 @@ reviews.get('/:id', async (req, res) => {
 })
 
 // CREATE
-reviews.post('/', async (req, res) => {
+reviews.post('/', authenticate, async (req, res) => {
+    const { username } = req
     try {
-        const review = await createReview(req.body)
+        const review = await createReview({reviewer: username, ...req.body})
         res.status(200).json(review)
     } catch (error) {
         res.status(500).json({ error: error })
