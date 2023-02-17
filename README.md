@@ -25,7 +25,7 @@ This app used Express to built a full CRUD back-end application that facilitates
 
 #### Screenshot
 - Heres a screenshot of the seed data created using chatGPT;
-![](/Users/dilrubamajumder/Documents/9.1/mod4/Portfolio-backend/Img/ChatGPT seed data.png)
+../Users/dilrubamajumder/Documents/9.1/mod4/Portfolio-backend/Img/ChatGPT seed data.png
 
 [Backend Repo](https://github.com/dilrubamajumder/Portfolio-backend).
 
