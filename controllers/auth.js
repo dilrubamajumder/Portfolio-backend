@@ -14,7 +14,7 @@ const authenticate = async (req, res, next) => {
 
   if (!token) return res.status(401).send("Token not found, please login.");
 
-  const { username } = jwt.verify(req.headers.authorization.split(' ')[1], process.env.AUTH_KEY)
+  const { username } = jwt.verify(token.split(' ')[1], process.env.AUTH_KEY)
 
   const user = await getOneUser(username);
 

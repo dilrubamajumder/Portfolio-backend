@@ -35,11 +35,9 @@ const {
  * @param {string} password - The user's password (to be hashed client-side and server-side)
  */
  const validateInputs = (username, password) => {
-    const usernameRegex = /\W/i;
     if (
       username.length < 3 ||
-      username.length > 30 ||
-      usernameRegex.test(username)
+      username.length > 30 
     ) {
       return false;
     }
@@ -54,15 +52,25 @@ const {
    */
   users.post('/', async (req, res) => {
     try {
+      //destructure username and password from the body of the request
       const { username, password } = req.body;
+      // Check to see if the username and password are valid
       if (validateInputs(username, password) === false) throw Error("Invalid Credentials.");
+      //declare the number of salt rounds which determines how hard it is to hack the password using any brute force methods
       const saltRounds = 7;
+      //encrypt the password
       const hashedPassword = await bcrypt.hash(password, saltRounds);
-      await createUser(username, hashedPassword);
-
+      //store the user in the database with the username and encrypted password
+      const user = await createUser(username, hashedPassword);
+      // create a json web token that contains the encrypted username
       const token = jwt.sign({ username: username }, process.env.AUTH_KEY);
-      res.cookie('token', token).sendStatus(200);
-    } catch (err) {
+      // send a status of 200 along with an object containing the user's details, a message, and the json web token
+      res.status(200).json({
+        user,
+        message: 'Account Creation Successful',
+        token
+    });
+  } catch (err) {
       res.status(500).send(err);
     }
   });
@@ -83,7 +91,7 @@ const {
         console.log(user)
         res.status(200).json({
           user,
-          message: 'Account Creation Successful',
+          message: 'login Successful',
           token
       });
       }
